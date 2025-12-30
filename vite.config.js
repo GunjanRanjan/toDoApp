@@ -8,5 +8,5 @@ export default defineConfig({
     include: /src\/.*\.[jt]sx?$/,
     exclude: [],
   },
-  base: "/my-todo-app/",
+  base: "/toDoApp/",
 });
