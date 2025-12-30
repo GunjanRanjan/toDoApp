@@ -1,6 +1,6 @@
 {
-  "homepage": "https://gunjanranjan.github.io/my-todo-app",
-  "name": "my-todo-app",
+  "homepage": "https://gunjanranjan.github.io/toDoApp",
+  "name": "My Todo App",
   "private": true,
   "version": "0.0.0",
   "type": "module",
