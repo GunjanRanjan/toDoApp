@@ -7,13 +7,17 @@ function App() {
   const [searchValue, setSearchValue] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTodoId, setEditTodoId] = useState(null);
-  const [editText, setEditText] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [descriptionTodoId, setDescriptionTodoId] = useState(null);
+  const [descriptionText, setDescriptionText] = useState("");
 
   const addTodo = () => {
     if (inputValue.trim() !== "") {
       const newTodo = {
         id: Date.now(),
-        text: inputValue.trim(),
+        title: inputValue.trim(),
+        description: "",
       };
 
       setTodos([newTodo, ...todos]);
@@ -26,31 +30,56 @@ function App() {
     setTodos(newTodos);
   };
 
-  const openEditModal = (id, text) => {
+  const openEditModal = (id, title) => {
     setEditTodoId(id);
-    setEditText(text);
+    setEditTitle(title);
     setShowEditModal(true);
   };
 
   const closeEditModal = () => {
     setShowEditModal(false);
     setEditTodoId(null);
-    setEditText("");
+    setEditTitle("");
   };
 
   const saveEdit = () => {
-    if (editText.trim() !== "") {
+    if (editTitle.trim() !== "") {
       const todoToEdit = todos.find((todo) => todo.id === editTodoId);
       const otherTodos = todos.filter((todo) => todo.id !== editTodoId);
 
       const updatedTodo = {
         ...todoToEdit,
-        text: editText.trim(),
+        title: editTitle.trim(),
       };
 
       setTodos([updatedTodo, ...otherTodos]);
       closeEditModal();
     }
+  };
+
+  const openDescriptionModal = (id, description) => {
+    setDescriptionTodoId(id);
+    setDescriptionText(description || "");
+    setShowDescriptionModal(true);
+  };
+
+  const closeDescriptionModal = () => {
+    setShowDescriptionModal(false);
+    setDescriptionTodoId(null);
+    setDescriptionText("");
+  };
+
+  const saveDescription = () => {
+    const todoToEdit = todos.find((todo) => todo.id === descriptionTodoId);
+    const otherTodos = todos.filter((todo) => todo.id !== descriptionTodoId);
+
+    const updatedTodo = {
+      ...todoToEdit,
+      description: descriptionText.trim(),
+    };
+
+    setTodos([updatedTodo, ...otherTodos]);
+    closeDescriptionModal();
   };
 
   const getFilteredTodos = () => {
@@ -59,9 +88,9 @@ function App() {
     }
 
     const filtered = todos.filter((todo) => {
-      const todoText = todo.text.toLowerCase();
+      const todoTitle = todo.title.toLowerCase();
       const searchText = searchValue.toLowerCase();
-      return todoText.includes(searchText);
+      return todoTitle.includes(searchText);
     });
 
     return filtered;
@@ -87,7 +116,7 @@ function App() {
         <div className="add-section">
           <input
             type="text"
-            placeholder="Add a new todo..."
+            placeholder="Add a new todo title..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => {
@@ -112,10 +141,17 @@ function App() {
           ) : (
             filteredTodos.map((todo) => (
               <div key={todo.id} className="todo-item">
-                <span className="todo-text">{todo.text}</span>
+                <span
+                  className="todo-title"
+                  onClick={() =>
+                    openDescriptionModal(todo.id, todo.description)
+                  }
+                >
+                  {todo.title}
+                </span>
                 <div className="button-group">
                   <button
-                    onClick={() => openEditModal(todo.id, todo.text)}
+                    onClick={() => openEditModal(todo.id, todo.title)}
                     className="edit-btn"
                   >
                     Edit
@@ -135,11 +171,11 @@ function App() {
         {showEditModal && (
           <div className="modal-overlay" onClick={closeEditModal}>
             <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-              <h2>Edit Todo</h2>
+              <h2>Edit Todo Title</h2>
               <input
                 type="text"
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     saveEdit();
@@ -153,6 +189,32 @@ function App() {
                   Save
                 </button>
                 <button onClick={closeEditModal} className="cancel-btn">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showDescriptionModal && (
+          <div className="modal-overlay" onClick={closeDescriptionModal}>
+            <div
+              className="modal-box description-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2>Todo Description</h2>
+              <textarea
+                value={descriptionText}
+                onChange={(e) => setDescriptionText(e.target.value)}
+                className="description-textarea"
+                placeholder="Write description here..."
+                autoFocus
+              />
+              <div className="modal-buttons">
+                <button onClick={saveDescription} className="save-btn">
+                  Save
+                </button>
+                <button onClick={closeDescriptionModal} className="cancel-btn">
                   Cancel
                 </button>
               </div>

@@ -90,10 +90,19 @@ h1 {
   border-radius: 5px;
 }
 
-.todo-text {
+.todo-title {
   flex: 1;
   font-size: 16px;
   color: #333;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.todo-title:hover {
+  background-color: #e8e8e8;
+  text-decoration: underline;
 }
 
 .button-group {
@@ -158,6 +167,10 @@ h1 {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+.description-modal {
+  max-width: 500px;
+}
+
 .modal-box h2 {
   margin-top: 0;
   margin-bottom: 20px;
@@ -212,4 +225,22 @@ h1 {
 
 .cancel-btn:hover {
   background-color: #666;
+}
+
+.description-textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  min-height: 150px;
+  resize: vertical;
+}
+
+.description-textarea:focus {
+  outline: none;
+  border-color: #4caf50;
 }
